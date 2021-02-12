@@ -1,0 +1,21 @@
+﻿
+.sidebar {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #200751;
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: ghostwhite;
+    padding-left: 20px;
+    padding-top: 50px;
+}
+
+body {
+    background-color: lightgray;
+    width: 100%;
+    height: 100%;
+}

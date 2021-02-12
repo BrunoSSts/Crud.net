@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Wiizi </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script type="text/jscript">
+        function GetRdmMail() {
+            var url = "/Home/EmailRandomizer";
+            $.get(url, null, function (data) {
+                $("#email").html(data);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="container">
+         Fulano de tal   <span id="rdmClicker" class="glyphicon glyphicon-arrow-down" aria-hidden="true" onclick="GetRdmMail()"></span>
+        </div>
+        <div id="email">Hellou@gmail.com</div>
+            @Html.ActionLink("Produto", "Index", "Produto")
+    </div>
+    <div class="container body-content">
+        <div style="background-color: white; padding: 10px">
+            @RenderBody()
+        </div>
+    </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+</body>
+</html>

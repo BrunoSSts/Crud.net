@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Lista produtos";
+}
+
+@model List<Crud.Models.Produto>
+Produtos Cadastrados
+<div style="float:right;background-color:green;margin-bottom:10px;">
+    @Html.ActionLink("+ Novo", "Create", new { }, new { @class = "btn", @style = "color:white" })
+
+</div>
+
+<hr />
+<div style="width:100%;">
+    <input style="width:100% important!;max-width: 100%" id="SearchInput" type="text" class="form-control">
+</div>
+<hr>
+<table class="table table-striped" id="tblProdutos">
+    <thead>
+        </tr>
+    <th scope="col">
+        Código
+    </th>
+    <th scope="col">
+        Descricao
+    </th>
+    <th scope="col">
+        Situacao
+    </th>
+    <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Situacao.Situacao)
+                </td>
+                <td scope="row" style="text-align:end;">
+                    <a href="./Home/Edit/@item.Codigo" class="glyphicon glyphicon-pencil btn" ></a> 
+                    <a><span class="glyphicon glyphicon-trash" data-item="@item.Codigo" /></a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table").on("click", ".glyphicon-trash", function () {
+                var id = $(this).attr('data-item');
+                if (confirm("Você tem certeza que gostaria de excluir este registro?")) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/Home/Delete/" + id,
+                        success: function (data) {
+                            RewriteData(data);
+                        },
+                        error: function (data) {
+                            alert("Houve um erro na pesquisa.");
+                        }
+                    });
+                }
+            });
+
+            $("#SearchInput").keyup(function (e) {
+                if ($("#SearchInput").is(":focus") && (e.keyCode == 13)) {
+                    var searchString = $("#SearchInput").val();
+                    $.ajax({
+                        method: "POST",
+                        url: "/Home/Search/",
+                        data: { searchString: searchString },
+                        success: function (data) {
+                            RewriteData(data);
+                        },
+                        error: function (data) {
+                            alert("Houve um erro na pesquisa.");
+                        }
+                    });
+                }
+            });
+        });
+
+        function RewriteData(data) {
+            $("#tblProdutos tbody > tr").remove();
+            $.each(data, function (i, produto) {
+                $("#tblProdutos tbody").append(
+                    "<tr>" +
+                    "   <td  scope=\"row\">" + produto.Codigo + "</td>" +
+                    "   <td scope=\"row\">" + produto.Descricao + "</td>" +
+                    "   <td scope=\"row\">" + produto.Situacao.Situacao + "</td>" +
+                    "   <td scope=\"row\" style=\"text-align: end;\">" +
+                    " <a href=\"./Home/Edit/"+ produto.Codigo+ "\" class=\"glyphicon glyphicon-pencil btn\"></a> " +
+                    "       <span class=\"glyphicon glyphicon-trash\" data-item=\"" + produto.Codigo + "\"/>" +
+                    "   </td>" +
+                    "</tr>"
+                );
+            });
+        }
+    </script>
+}
+
